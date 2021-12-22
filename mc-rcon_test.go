@@ -20,3 +20,12 @@ func TestMakeSchematic(t *testing.T) {
 
 	fmt.Println(mc_rcon.MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client))
 }
+
+func TestBuildWithSchematic(t *testing.T) {
+	client := mc_rcon.GetClient("localhost:25575", "password")
+	defer client.Close()
+
+	mc_rcon.BuildWithSchematic(
+		mc_rcon.MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client),
+		-15, -60, -7, client)
+}

@@ -84,3 +84,18 @@ func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 i
 	}
 	return schematic
 }
+
+func BuildWithSchematic(schematic [][][]string, x int, y int, z int, client *minecraft.Client) {
+	for i, v := range schematic {
+		for j, vv := range v {
+			for k, vvv := range vv {
+				time.Sleep(3)
+				_, err := client.SendCommand(fmt.Sprintf(
+					"setblock %d %d %d %s", x+i, y+j, z+k, vvv))
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+		}
+	}
+}
