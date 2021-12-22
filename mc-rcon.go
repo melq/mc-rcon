@@ -1,4 +1,4 @@
-package main
+package mc_rcon
 
 import (
 	"fmt"
@@ -9,6 +9,18 @@ import (
 	"strings"
 	"time"
 )
+
+func GetClient(hostport string, password string) *minecraft.Client {
+	client, err := minecraft.NewClient(hostport)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = client.Authenticate(password); err != nil {
+		log.Fatal(err)
+	}
+	return client
+}
 
 func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, float64) {
 	resp, err := client.SendCommand(fmt.Sprintf("execute at %s run tp %s ~ ~ ~", name, name))
@@ -71,21 +83,4 @@ func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 i
 		}
 	}
 	return schematic
-}
-
-func main() {
-	client, err := minecraft.NewClient("localhost:25575")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Close()
-
-	if err = client.Authenticate("password"); err != nil {
-		log.Fatal(err)
-	}
-
-	//x, y, z := GetPlayerPos("tu_tutu_", client)
-	//fmt.Printf("%f, %f, %f\n", x, y, z)
-
-	fmt.Println(MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client))
 }

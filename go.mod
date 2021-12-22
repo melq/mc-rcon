@@ -1,4 +1,4 @@
-module mc-rcon
+module github.com/melq/mc-rcon
 
 go 1.17
 
