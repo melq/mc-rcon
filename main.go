@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, float64) {
@@ -29,7 +30,7 @@ func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, floa
 	return x, y, z
 }
 
-/*func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, client *minecraft.Client) [][][]string {
+func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, client *minecraft.Client) [][][]string {
 	if x1 > x2 {
 		tmp := x1
 		x1 = x2
@@ -70,7 +71,7 @@ func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, floa
 		}
 	}
 	return schematic
-}*/
+}
 
 func main() {
 	client, err := minecraft.NewClient("localhost:25575")
@@ -83,8 +84,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	x, y, z := GetPlayerPos("tu_tutu_", client)
-	fmt.Printf("%f, %f, %f\n", x, y, z)
+	//x, y, z := GetPlayerPos("tu_tutu_", client)
+	//fmt.Printf("%f, %f, %f\n", x, y, z)
 
-	//fmt.Println(MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client))
+	fmt.Println(MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client))
 }
