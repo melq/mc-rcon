@@ -18,14 +18,40 @@ func TestMakeSchematic(t *testing.T) {
 	client := mc_rcon.GetClient("localhost:25575", "password")
 	defer client.Close()
 
-	fmt.Println(mc_rcon.MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client))
+	schematic := []string{
+		"minecraft:glass",
+		"minecraft:birch_door[facing=west,half=lower]",
+		"minecraft:birch_door[facing=west,half=upper]",
+		"minecraft:cobblestone",
+		"minecraft:oak_log",
+		"minecraft:spruce_stairs[facing=north]",
+		"minecraft:spruce_stairs[facing=south]",
+		"minecraft:spruce_stairs[facing=west]",
+		"minecraft:spruce_stairs[facing=east]",
+	}
+	fmt.Println(mc_rcon.MakeSchematic(
+		schematic, 1, -60, -21, -4, -57, -15, client))
 }
 
 func TestBuildWithSchematic(t *testing.T) {
 	client := mc_rcon.GetClient("localhost:25575", "password")
 	defer client.Close()
 
+	materials := []string{
+		"minecraft:glass",
+		"minecraft:birch_planks",
+		"minecraft:birch_door[facing=west,half=lower]",
+		"minecraft:birch_door[facing=west,half=upper]",
+		"minecraft:cobblestone",
+		"minecraft:oak_log",
+		"minecraft:spruce_stairs[facing=north]",
+		"minecraft:spruce_stairs[facing=south]",
+		"minecraft:spruce_stairs[facing=west]",
+		"minecraft:spruce_stairs[facing=east]",
+	}
+	schematic := mc_rcon.MakeSchematic(
+		materials, -4, -60, -21, 1, -57, -15, client)
+
 	mc_rcon.BuildWithSchematic(
-		mc_rcon.MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client),
-		-15, -60, -7, client)
+		schematic, -4, -60, -11, client)
 }

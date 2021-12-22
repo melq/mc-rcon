@@ -66,6 +66,7 @@ func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 i
 		for y := y1; y <= y2; y++ {
 			schematic[x-x1] = append(schematic[x-x1], []string{})
 			for z := z1; z <= z2; z++ {
+				tmp := ""
 				for _, v := range blocks {
 					time.Sleep(3)
 					resp, err := client.SendCommand(fmt.Sprintf(
@@ -73,12 +74,11 @@ func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 i
 					if err != nil {
 						log.Fatal(err)
 					}
-					tmp := ""
 					if resp.Body == "Test passed\n" {
 						tmp = v
 					}
-					schematic[x-x1][y-y1] = append(schematic[x-x1][y-y1], tmp)
 				}
+				schematic[x-x1][y-y1] = append(schematic[x-x1][y-y1], tmp)
 			}
 		}
 	}
@@ -86,6 +86,7 @@ func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 i
 }
 
 func BuildWithSchematic(schematic [][][]string, x int, y int, z int, client *minecraft.Client) {
+	cnt := 1
 	for i, v := range schematic {
 		for j, vv := range v {
 			for k, vvv := range vv {
@@ -95,6 +96,8 @@ func BuildWithSchematic(schematic [][][]string, x int, y int, z int, client *min
 				if err != nil {
 					log.Fatal(err)
 				}
+				fmt.Println(cnt, ": setblock", x+i, y+j, z+k, schematic[i][j][k])
+				cnt++
 			}
 		}
 	}
