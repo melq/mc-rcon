@@ -1,14 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"github.com/willroberts/minecraft-client"
 	"log"
-	//"regexp"
-	//"strconv"
-	//"strings"
+	"regexp"
+	"strconv"
+	"strings"
 )
 
-/*func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, float64) {
+func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, float64) {
 	resp, err := client.SendCommand(fmt.Sprintf("execute at %s run tp %s ~ ~ ~", name, name))
 	if err != nil {
 		log.Fatal(err)
@@ -26,7 +27,7 @@ import (
 	}
 
 	return x, y, z
-}*/
+}
 
 /*func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, client *minecraft.Client) [][][]string {
 	if x1 > x2 {
@@ -82,8 +83,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//x, y, z := GetPlayerPos("tu_tutu_", client)
-	//fmt.Printf("%f, %f, %f\n", x, y, z)
+	x, y, z := GetPlayerPos("tu_tutu_", client)
+	fmt.Printf("%f, %f, %f\n", x, y, z)
 
 	//fmt.Println(MakeSchematic([]string{"minecraft:stone"}, -6, -60, 3, -3, -57, 6, client))
 }
