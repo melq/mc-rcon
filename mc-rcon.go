@@ -96,7 +96,7 @@ func BuildWithSchematic(schematic [][][]string, x int, y int, z int, client *min
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Println(cnt, ": setblock", x+i, y+j, z+k, schematic[i][j][k])
+				fmt.Printf("%d: %d %d %d %s\n", cnt, x+i, y+j, z+k, schematic[i][j][k])
 				cnt++
 			}
 		}
