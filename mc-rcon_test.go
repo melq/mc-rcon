@@ -56,6 +56,13 @@ func TestBuildWithSchematic(t *testing.T) {
 		schematic, -4, -60, -11, client)
 }
 
+func TestGiveItsumono(t *testing.T) {
+	client := mc_rcon.GetClient("localhost:25575", "password")
+	defer client.Close()
+
+	mc_rcon.GiveItsumono("tu_tutu_", client)
+}
+
 func TestGetInventory(t *testing.T) {
 	client := mc_rcon.GetClient("localhost:25575", "password")
 	defer client.Close()
