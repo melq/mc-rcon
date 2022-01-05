@@ -102,3 +102,24 @@ func BuildWithSchematic(schematic [][][]string, x int, y int, z int, client *min
 		}
 	}
 }
+
+//func GiveItsumono(name string, client *minecraft.Client) {
+//	items := []string{
+//		"/give tu_tutu_ minecraft:netherite_helmet{Enchantments:[{id:unbreaking,lvl:3},{id:mending,lvl:1},{id:protection,lvl:4},{id:respiration,lvl:3},{id:aqua_affinity,lvl:1}]}",
+//	}
+//	for _, item := range items {
+//		_, err := client.SendCommand(fmt.Sprintf("give %s %s", name, item))
+//		if err != nil {
+//			log.Fatal(err)
+//		}
+//	}
+//}
+
+func GetInventory(name string, client *minecraft.Client) /*[]string*/ {
+	resp, err := client.SendCommand(fmt.Sprintf("give %s %s", name))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(resp)
+}
