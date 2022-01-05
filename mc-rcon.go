@@ -105,21 +105,20 @@ func BuildWithSchematic(schematic [][][]string, x int, y int, z int, client *min
 }
 
 func GiveItsumono(name string, client *minecraft.Client) {
-	inventory := GetInventory(name, client)
-	//inventory := Inventory{
-	//	Items: []Item{
-	//		{Id: "minecraft:firework_rocket", Count: "64", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment(nil)}},
-	//		{Id: "minecraft:netherite_boots", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "protection", Lvl: "4"}, {Id: "depth_strider", Lvl: "3"}, {Id: "feather_falling", Lvl: "4"}}}},
-	//		{Id: "minecraft:elytra", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}}}},
-	//		{Id: "minecraft:netherite_helmet", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "protection", Lvl: "4"}, {Id: "respiration", Lvl: "3"}, {Id: "aqua_affinity", Lvl: "1"}}}},
-	//		{Id: "minecraft:netherite_leggings", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "minecraft:unbreaking", Lvl: "3s"}, {Id: "minecraft:mending", Lvl: "1s"}, {Id: "minecraft:protection", Lvl: "4s"}}}},
-	//		{Id: "minecraft:netherite_shovel", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "efficiency", Lvl: "5"}}}},
-	//		{Id: "minecraft:arrow", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment(nil)}},
-	//		{Id: "minecraft:bow", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "infinity", Lvl: "1"}, {Id: "power", Lvl: "5"}, {Id: "punch", Lvl: "2"}, {Id: "flame", Lvl: "1"}}}},
-	//		{Id: "minecraft:netherite_pickaxe", Count: "", Tag: Tag{Display: Display{Name: Name{Text: "silk_touch"}}, Enchantments: []Enchantment{{Id: "minecraft:unbreaking", Lvl: "3s"}, {Id: "minecraft:mending", Lvl: "1s"}, {Id: "minecraft:efficiency", Lvl: "5s"}, {Id: "minecraft:silk_touch", Lvl: "1s"}}}},
-	//		{Id: "minecraft:netherite_pickaxe", Count: "", Tag: Tag{Display: Display{Name: Name{Text: "fortune"}}, Enchantments: []Enchantment{{Id: "minecraft:unbreaking", Lvl: "3s"}, {Id: "minecraft:mending", Lvl: "1s"}, {Id: "minecraft:efficiency", Lvl: "5s"}, {Id: "minecraft:fortune", Lvl: "3s"}}}},
-	//		{Id: "minecraft:netherite_axe", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "efficiency", Lvl: "5"}, {Id: "sharpness", Lvl: "5"}}}},
-	//		{Id: "minecraft:netherite_sword", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "sharpness", Lvl: "5"}, {Id: "sweeping", Lvl: "3"}}}}}}
+	inventory := Inventory{
+		Items: []Item{
+			{Id: "minecraft:firework_rocket", Count: "64", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment(nil)}},
+			{Id: "minecraft:netherite_boots", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "protection", Lvl: "4"}, {Id: "depth_strider", Lvl: "3"}, {Id: "feather_falling", Lvl: "4"}}}},
+			{Id: "minecraft:elytra", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}}}},
+			{Id: "minecraft:netherite_helmet", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "protection", Lvl: "4"}, {Id: "respiration", Lvl: "3"}, {Id: "aqua_affinity", Lvl: "1"}}}},
+			{Id: "minecraft:netherite_leggings", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "minecraft:unbreaking", Lvl: "3s"}, {Id: "minecraft:mending", Lvl: "1s"}, {Id: "minecraft:protection", Lvl: "4s"}}}},
+			{Id: "minecraft:netherite_shovel", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "efficiency", Lvl: "5"}}}},
+			{Id: "minecraft:arrow", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment(nil)}},
+			{Id: "minecraft:bow", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "infinity", Lvl: "1"}, {Id: "power", Lvl: "5"}, {Id: "punch", Lvl: "2"}, {Id: "flame", Lvl: "1"}}}},
+			{Id: "minecraft:netherite_pickaxe", Count: "", Tag: Tag{Display: Display{Name: Name{Text: "silk_touch"}}, Enchantments: []Enchantment{{Id: "minecraft:unbreaking", Lvl: "3s"}, {Id: "minecraft:mending", Lvl: "1s"}, {Id: "minecraft:efficiency", Lvl: "5s"}, {Id: "minecraft:silk_touch", Lvl: "1s"}}}},
+			{Id: "minecraft:netherite_pickaxe", Count: "", Tag: Tag{Display: Display{Name: Name{Text: "fortune"}}, Enchantments: []Enchantment{{Id: "minecraft:unbreaking", Lvl: "3s"}, {Id: "minecraft:mending", Lvl: "1s"}, {Id: "minecraft:efficiency", Lvl: "5s"}, {Id: "minecraft:fortune", Lvl: "3s"}}}},
+			{Id: "minecraft:netherite_axe", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "efficiency", Lvl: "5"}, {Id: "sharpness", Lvl: "5"}}}},
+			{Id: "minecraft:netherite_sword", Count: "", Tag: Tag{Display: Display{Name: Name{Text: ""}}, Enchantments: []Enchantment{{Id: "unbreaking", Lvl: "3"}, {Id: "mending", Lvl: "1"}, {Id: "sharpness", Lvl: "5"}, {Id: "sweeping", Lvl: "3"}}}}}}
 
 	for _, item := range inventory.Items {
 		time.Sleep(3)
