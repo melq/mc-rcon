@@ -116,45 +116,51 @@ func BuildWithSchematic(schematic [][][]string, x int, y int, z int, client *min
 //	}
 //}
 
+type Name struct {
+	Text string `json:"text"`
+}
+
+type Display struct {
+	Name Name `json:"Name"`
+}
+
 type Enchantment struct {
 	Id  string `json:"id"`
 	Lvl string `json:"lvl"`
 }
 
 type Tag struct {
-	Damage       string `json:"Damage"`
-	Enchantments []Enchantment
+	Display      Display       `json:"display"`
+	Enchantments []Enchantment `json:"Enchantments"`
 }
 
 type Item struct {
-	Slot  string `json:"Slot"`
-	Id    string `json:"id"`
-	Count string `json:"Count"`
-	Tag   Tag    `json:"tag"`
+	Id  string `json:"id"`
+	Tag Tag    `json:"tag"`
 }
 
 type Inventory struct {
 	Items []Item `json:"items"`
 }
 
-func GetInventory(name string, client *minecraft.Client) /*[]string*/ {
-	//resp, err := client.SendCommand(fmt.Sprintf("data get entity %s Inventory", name))
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-
-	//str := resp.Body[strings.Index(resp.Body, ": [")+2:]
-	str := "[{Slot: 103b, id: \"minecraft:netherite_helmet\", Count: 1b, tag: {Damage: 0, Enchantments: [{lvl: 3, id: \"unbreaking\"}, {lvl: 1, id: \"mending\"}, {lvl: 4, id: \"protection\"}, {lvl: 3, id: \"respiration\"}, {lvl: 1, id: \"aqua_affinity\"}]}}]"
-	inventory := Inventory{make([]Item, 0)}
+func GetInventory(name string, client *minecraft.Client) Inventory {
+	resp, err := client.SendCommand(fmt.Sprintf("data get entity %s Inventory", name))
+	if err != nil {
+		log.Fatal(err)
+	}
+	str := resp.Body[strings.Index(resp.Body, ": [")+2:]
 
 	reg := regexp.MustCompile(`([\w\d]+): `)
 	str = "{items: " + str + "}"
 	str = reg.ReplaceAllString(str, "\"$1\": ")
-	reg = regexp.MustCompile(`: ([\w\d]+),`)
-	str = reg.ReplaceAllString(str, ": \"$1\", ")
-	fmt.Println(str)
+	reg = regexp.MustCompile(`: ([\w\d]+)`)
+	str = reg.ReplaceAllString(str, ": \"$1\"")
+	reg = regexp.MustCompile(`'({[\w\d\s:"]+})'`)
+	str = reg.ReplaceAllString(str, "$1")
+
+	inventory := Inventory{make([]Item, 0)}
 	if err := json.Unmarshal([]byte(str), &inventory); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(inventory)
+	return inventory
 }
