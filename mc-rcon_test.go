@@ -69,3 +69,7 @@ func TestGetInventory(t *testing.T) {
 
 	mc_rcon.GetInventory("tu_tutu_", client)
 }
+
+func TestBuildMaze(t *testing.T) {
+	mc_rcon.BuildMaze(0, 0, 0, 10, 10, 10)
+}

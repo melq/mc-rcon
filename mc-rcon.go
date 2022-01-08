@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/willroberts/minecraft-client"
 	"log"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -194,4 +195,23 @@ func GetInventory(name string, client *minecraft.Client) Inventory {
 	}
 	fmt.Printf("%#v\n", inventory)
 	return inventory
+}
+
+func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) {
+	width := int(math.Abs(float64(x2 - x1)))
+	height := int(math.Abs(float64(z2 - z1)))
+	maze := make([][]bool, height)
+	for i := 0; i < height; i++ {
+		maze[i] = make([]bool, width)
+	}
+	for _, v := range maze {
+		for _, vv := range v {
+			tmp := "□"
+			if vv {
+				tmp = "■"
+			}
+			fmt.Printf("%s ", tmp)
+		}
+		fmt.Println()
+	}
 }
