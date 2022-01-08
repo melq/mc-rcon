@@ -316,8 +316,8 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 				}
 			}
 			emptyCell := Cell{0, 0}
-			if d != emptyCell && maze[s.Y+2*d.Y][s.X+2*d.X] {
-				break
+			if d != emptyCell && maze[s.Y+2*d.Y][s.X+2*d.X] { //壁の拡張終了
+				continue
 			}
 		}
 	}
