@@ -212,6 +212,19 @@ func isCurrentWall(s []Cell, n Cell) bool {
 	return false
 }
 
+func dumpMaze(maze [][]bool) {
+	for _, v := range maze {
+		for _, vv := range v {
+			tmp := "□"
+			if vv {
+				tmp = "■"
+			}
+			fmt.Printf("%s ", tmp)
+		}
+		fmt.Println()
+	}
+}
+
 func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) error {
 	if x1 > x2 {
 		tmp := x1
@@ -306,17 +319,6 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 			}
 
 		}
-	}
-
-	for _, v := range maze {
-		for _, vv := range v {
-			tmp := "□"
-			if vv {
-				tmp = "■"
-			}
-			fmt.Printf("%s ", tmp)
-		}
-		fmt.Println()
 	}
 	return nil
 }
