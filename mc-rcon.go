@@ -203,6 +203,15 @@ type Cell struct {
 	Y int
 }
 
+func isCurrentWall(s []Cell, n Cell) bool {
+	for _, v := range s {
+		if n == v {
+			return true
+		}
+	}
+	return false
+}
+
 func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) error {
 	if x1 > x2 {
 		tmp := x1
@@ -254,6 +263,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 	for len(startCells) != 0 {
 		r := rand.Intn(len(startCells))
 		s := startCells[r]
+
 		if maze[s.Y][s.X] {
 			var tmp []Cell
 			for i := 0; i < len(startCells); i++ {
@@ -264,39 +274,37 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 			startCells = tmp
 			continue
 		}
+
+		var currentWall []Cell
+
 		for {
 			maze[s.Y][s.X] = true
-
-			d := 0
+			currentWall = append(currentWall, s)
 			for {
-				d = rand.Intn(4)
-				switch d {
+				d := Cell{0, 0}
+				switch rand.Intn(4) {
 				case 0:
 					{
-						if !maze[s.Y-1][s.X] {
-							break
-						}
+						d = Cell{0, -1}
 					}
 				case 1:
 					{
-						if !maze[s.Y][s.X+1] {
-							break
-						}
+						d = Cell{1, 0}
 					}
 				case 2:
 					{
-						if !maze[s.Y+1][s.X] {
-							break
-						}
+						d = Cell{0, 1}
 					}
 				case 3:
 					{
-						if !maze[s.Y][s.X-1] {
-							break
-						}
+						d = Cell{-1, 0}
 					}
 				}
+				if !maze[s.Y+d.Y][s.X+d.X] && isCurrentWall(currentWall, Cell{s.X + 2*d.X, s.Y + 2*d.Y}) {
+					break
+				}
 			}
+
 		}
 	}
 
