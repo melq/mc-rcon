@@ -216,15 +216,6 @@ func isCurrentWall(s []Cell, n Cell) bool {
 	return false
 }
 
-func dumpMazeWithNum(maze [][]int) {
-	for _, v := range maze {
-		for _, vv := range v {
-			fmt.Printf("%2d ", vv)
-		}
-		fmt.Println()
-	}
-}
-
 func dumpMaze(maze [][]int) {
 	for _, v := range maze {
 		for _, vv := range v {
@@ -277,7 +268,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 		}
 	}
 
-	for len(startCells) != 0 { // 迷路生成
+	for len(startCells) != 0 { // 迷路生成(起点リストを回す)
 		rand.Seed(time.Now().UnixNano())
 		r := rand.Intn(len(startCells))
 		s := startCells[r]
@@ -329,23 +320,23 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 						d = Cell{-1, 0}
 					}
 				}
-				if maze[s.Y+d.Y][s.X+d.X] == 0 && !isCurrentWall(currentWall, Cell{s.X + 2*d.X, s.Y + 2*d.Y}) {
+				if maze[s.Y+d.Y][s.X+d.X] == 0 && !isCurrentWall(currentWall, Cell{s.X + 2*d.X, s.Y + 2*d.Y}) { // 進める方向なら
 					break
 				}
 			}
-			if d.isEmpty() {
+			if d.isEmpty() { // どこにも進めなければdはEmpty
 				continue
 			}
 
-			currentWall = append(currentWall, Cell{s.X + d.X, s.Y + d.Y})
-			if maze[s.Y+2*d.Y][s.X+2*d.X] != 0 { //壁の拡張終了
-				break
+			currentWall = append(currentWall, Cell{s.X + d.X, s.Y + d.Y}) // 壁に当たっても当たらなくても1マスは進む
+			if maze[s.Y+2*d.Y][s.X+2*d.X] != 0 {                          // 壁に当たったら
+				break // 壁の拡張終了
 			} else {
-				s = Cell{s.X + 2*d.X, s.Y + 2*d.Y}
+				s = Cell{s.X + 2*d.X, s.Y + 2*d.Y} // 2マス進めて次のループ
 				currentWall = append(currentWall, s)
 			}
 		}
-		for i, v := range currentWall {
+		for i, v := range currentWall { // 壁を確定
 			maze[v.Y][v.X] = i + 1
 		}
 	}
