@@ -259,7 +259,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 		return fmt.Errorf("size is too small")
 	}
 
-	maze := make([][]bool, height) // 二次元スライス初期化
+	maze := make([][]int, height) // 二次元スライス初期化
 	for i := 0; i < height; i++ {
 		maze[i] = make([]int, width)
 	}
