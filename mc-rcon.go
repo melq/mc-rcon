@@ -216,11 +216,20 @@ func isCurrentWall(s []Cell, n Cell) bool {
 	return false
 }
 
-func dumpMaze(maze [][]bool) {
+func dumpMazeWithNum(maze [][]int) {
+	for _, v := range maze {
+		for _, vv := range v {
+			fmt.Printf("%2d ", vv)
+		}
+		fmt.Println()
+	}
+}
+
+func dumpMaze(maze [][]int) {
 	for _, v := range maze {
 		for _, vv := range v {
 			tmp := "□"
-			if vv {
+			if vv != 0 {
 				tmp = "■"
 			}
 			fmt.Printf("%s ", tmp)
@@ -252,14 +261,14 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 
 	maze := make([][]bool, height) // 二次元スライス初期化
 	for i := 0; i < height; i++ {
-		maze[i] = make([]bool, width)
+		maze[i] = make([]int, width)
 	}
 
 	var startCells []Cell
 	for i, v := range maze { // 周囲の壁化と起点取得
 		for j := range v {
 			if i == 0 || j == 0 || i == height-1 || j == width-1 {
-				maze[i][j] = true
+				maze[i][j] = -1
 			} else {
 				if i%2 == 0 && j%2 == 0 {
 					startCells = append(startCells, Cell{j, i})
@@ -269,10 +278,11 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 	}
 
 	for len(startCells) != 0 { // 迷路生成
+		rand.Seed(time.Now().UnixNano())
 		r := rand.Intn(len(startCells))
 		s := startCells[r]
 
-		if maze[s.Y][s.X] { // その起点が既に壁の場合
+		if maze[s.Y][s.X] != 0 { // その起点が既に壁の場合
 			var tmp []Cell
 			for i := 0; i < len(startCells); i++ {
 				if i != r {
@@ -283,20 +293,21 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 			continue
 		}
 
-		var currentWall []Cell
+		currentWall := []Cell{s}
 
 		for { // 起点から壁伸ばし処理
-			maze[s.Y][s.X] = true
-			currentWall = append(currentWall, s)
-
 			d := Cell{0, 0}
 			for { // 進む方向決め
-				if maze[s.Y-1][s.X] || isCurrentWall(currentWall, Cell{s.X, s.Y - 2}) &&
-					maze[s.Y][s.X+1] || isCurrentWall(currentWall, Cell{s.X + 2, s.Y}) &&
-					maze[s.Y+1][s.X] || isCurrentWall(currentWall, Cell{s.X, s.Y + 2}) &&
-					maze[s.Y][s.X-1] || isCurrentWall(currentWall, Cell{s.X - 2, s.Y}) { // どこにも進めないなら
-					s = currentWall[len(currentWall)-1]
-					currentWall = currentWall[:len(currentWall)-1]
+				if maze[s.Y-1][s.X] != 0 || isCurrentWall(currentWall, Cell{s.X, s.Y - 2}) &&
+					maze[s.Y][s.X+1] != 0 && isCurrentWall(currentWall, Cell{s.X + 2, s.Y}) &&
+					maze[s.Y+1][s.X] != 0 && isCurrentWall(currentWall, Cell{s.X, s.Y + 2}) &&
+					maze[s.Y][s.X-1] != 0 && isCurrentWall(currentWall, Cell{s.X - 2, s.Y}) { // どこにも進めないなら
+					if len(currentWall) > 3 {
+						s = currentWall[len(currentWall)-2]
+						currentWall = currentWall[:len(currentWall)-2]
+					} else {
+						currentWall = []Cell{}
+					}
 					break
 				}
 
@@ -318,7 +329,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 						d = Cell{-1, 0}
 					}
 				}
-				if !maze[s.Y+d.Y][s.X+d.X] && !isCurrentWall(currentWall, Cell{s.X + 2*d.X, s.Y + 2*d.Y}) {
+				if maze[s.Y+d.Y][s.X+d.X] == 0 && !isCurrentWall(currentWall, Cell{s.X + 2*d.X, s.Y + 2*d.Y}) {
 					break
 				}
 			}
@@ -326,11 +337,16 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 				continue
 			}
 
-			if maze[s.Y+2*d.Y][s.X+2*d.X] { //壁の拡張終了
-				maze[s.Y+d.Y][s.X+d.X] = true
+			if maze[s.Y+2*d.Y][s.X+2*d.X] != 0 { //壁の拡張終了
+				break
+			} else {
+				currentWall = append(currentWall, Cell{s.X + d.X, s.Y + d.Y})
 				s = Cell{s.X + 2*d.X, s.Y + 2*d.Y}
-				continue
+				currentWall = append(currentWall, s)
 			}
+		}
+		for i, v := range currentWall {
+			maze[v.Y][v.X] = i + 1
 		}
 	}
 
