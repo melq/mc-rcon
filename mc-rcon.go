@@ -229,6 +229,11 @@ func dumpMaze(maze [][]bool) {
 	}
 }
 
+func (c *Cell) isEmpty() bool {
+	empty := Cell{}
+	return *c == empty
+}
+
 func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) error {
 	sortPositions(&x1, &y1, &z1, &x2, &y2, &z2)
 
@@ -290,6 +295,8 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 					maze[s.Y][s.X+1] || isCurrentWall(currentWall, Cell{s.X + 2, s.Y}) &&
 					maze[s.Y+1][s.X] || isCurrentWall(currentWall, Cell{s.X, s.Y + 2}) &&
 					maze[s.Y][s.X-1] || isCurrentWall(currentWall, Cell{s.X - 2, s.Y}) { // どこにも進めないなら
+					s = currentWall[len(currentWall)-1]
+					currentWall = currentWall[:len(currentWall)-1]
 					break
 				}
 
@@ -315,8 +322,13 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 					break
 				}
 			}
-			emptyCell := Cell{0, 0}
-			if d != emptyCell && maze[s.Y+2*d.Y][s.X+2*d.X] { //壁の拡張終了
+			if d.isEmpty() {
+				continue
+			}
+
+			if maze[s.Y+2*d.Y][s.X+2*d.X] { //壁の拡張終了
+				maze[s.Y+d.Y][s.X+d.X] = true
+				s = Cell{s.X + 2*d.X, s.Y + 2*d.Y}
 				continue
 			}
 		}
