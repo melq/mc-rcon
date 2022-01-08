@@ -234,11 +234,7 @@ func (c *Cell) isEmpty() bool {
 	return *c == empty
 }
 
-func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) error {
-	sortPositions(&x1, &y1, &z1, &x2, &y2, &z2)
-
-	height := int(math.Abs(float64(z2 - z1)))
-	width := int(math.Abs(float64(x2 - x1)))
+func createMaze(height int, width int) ([][]int, error) {
 
 	if height%2 == 0 { // サイズの奇数合わせ
 		height--
@@ -247,7 +243,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 		width--
 	}
 	if height < 5 || width < 5 { // サイズのチェック
-		return fmt.Errorf("size is too small")
+		return nil, fmt.Errorf("size is too small")
 	}
 
 	maze := make([][]int, height) // 二次元スライス初期化
@@ -340,7 +336,19 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 			maze[v.Y][v.X] = i + 1
 		}
 	}
+	return maze, nil
+}
+
+func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, /*material string, client *minecraft.Client*/) {
+	sortPositions(&x1, &y1, &z1, &x2, &y2, &z2)
+
+	height := int(math.Abs(float64(z2 - z1)))
+	width := int(math.Abs(float64(x2 - x1)))
+
+	maze, err := createMaze(height, width)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	dumpMaze(maze)
-	return nil
 }

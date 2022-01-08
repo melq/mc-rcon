@@ -71,5 +71,5 @@ func TestGetInventory(t *testing.T) {
 }
 
 func TestBuildMaze(t *testing.T) {
-	mc_rcon.BuildMaze(0, 0, 0, 17, 20, 13)
+	mc_rcon.BuildMaze(0, 0, 0, 19, 20, 15)
 }
