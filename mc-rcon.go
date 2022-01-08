@@ -25,6 +25,24 @@ func GetClient(hostport string, password string) *minecraft.Client {
 	return client
 }
 
+func sortPositions(x1 *int, y1 *int, z1 *int, x2 *int, y2 *int, z2 *int) {
+	if *x1 > *x2 {
+		tmp := *x1
+		*x1 = *x2
+		*x2 = tmp
+	}
+	if *y1 > *y2 {
+		tmp := *y1
+		*y1 = *y2
+		*y2 = tmp
+	}
+	if *z1 > *z2 {
+		tmp := *z1
+		*z1 = *z2
+		*z2 = tmp
+	}
+}
+
 func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, float64) {
 	resp, err := client.SendCommand(fmt.Sprintf("execute at %s run tp %s ~ ~ ~", name, name))
 	if err != nil {
@@ -46,21 +64,7 @@ func GetPlayerPos(name string, client *minecraft.Client) (float64, float64, floa
 }
 
 func MakeSchematic(blocks []string, x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, client *minecraft.Client) [][][]string {
-	if x1 > x2 {
-		tmp := x1
-		x1 = x2
-		x2 = tmp
-	}
-	if y1 > y2 {
-		tmp := y1
-		y1 = y2
-		y2 = tmp
-	}
-	if z1 > z2 {
-		tmp := z1
-		z1 = z2
-		z2 = tmp
-	}
+	sortPositions(&x1, &y1, &z1, &x2, &y2, &z2)
 
 	var schematic [][][]string
 
@@ -226,21 +230,7 @@ func dumpMaze(maze [][]bool) {
 }
 
 func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) error {
-	if x1 > x2 {
-		tmp := x1
-		x1 = x2
-		x2 = tmp
-	}
-	if y1 > y2 {
-		tmp := y1
-		y1 = y2
-		y2 = tmp
-	}
-	if z1 > z2 {
-		tmp := z1
-		z1 = z2
-		z2 = tmp
-	}
+	sortPositions(&x1, &y1, &z1, &x2, &y2, &z2)
 
 	height := int(math.Abs(float64(z2 - z1)))
 	width := int(math.Abs(float64(x2 - x1)))
@@ -320,5 +310,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 
 		}
 	}
+
+	dumpMaze(maze)
 	return nil
 }
