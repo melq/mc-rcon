@@ -235,23 +235,23 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 	height := int(math.Abs(float64(z2 - z1)))
 	width := int(math.Abs(float64(x2 - x1)))
 
-	if height%2 == 0 {
+	if height%2 == 0 { // サイズの奇数合わせ
 		height--
 	}
 	if width%2 == 0 {
 		width--
 	}
-	if height < 5 || width < 5 {
+	if height < 5 || width < 5 { // サイズのチェック
 		return fmt.Errorf("size is too small")
 	}
 
-	maze := make([][]bool, height)
+	maze := make([][]bool, height) // 二次元スライス初期化
 	for i := 0; i < height; i++ {
 		maze[i] = make([]bool, width)
 	}
 
 	var startCells []Cell
-	for i, v := range maze {
+	for i, v := range maze { // 周囲の壁化と起点取得
 		for j := range v {
 			if i == 0 || j == 0 || i == height-1 || j == width-1 {
 				maze[i][j] = true
@@ -263,11 +263,11 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 		}
 	}
 
-	for len(startCells) != 0 {
+	for len(startCells) != 0 { // 迷路生成
 		r := rand.Intn(len(startCells))
 		s := startCells[r]
 
-		if maze[s.Y][s.X] {
+		if maze[s.Y][s.X] { // その起点が既に壁の場合
 			var tmp []Cell
 			for i := 0; i < len(startCells); i++ {
 				if i != r {
@@ -280,10 +280,17 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 
 		var currentWall []Cell
 
-		for {
+		for { // 起点から壁伸ばし処理
 			maze[s.Y][s.X] = true
 			currentWall = append(currentWall, s)
-			for {
+			for { // 進む方向決め
+				if maze[s.Y-1][s.X] || isCurrentWall(currentWall, Cell{s.X, s.Y - 2}) &&
+					maze[s.Y][s.X+1] || isCurrentWall(currentWall, Cell{s.X + 2, s.Y}) &&
+					maze[s.Y+1][s.X] || isCurrentWall(currentWall, Cell{s.X, s.Y + 2}) &&
+					maze[s.Y][s.X-1] || isCurrentWall(currentWall, Cell{s.X - 2, s.Y}) { // どこにも進めないなら
+					break
+				}
+
 				d := Cell{0, 0}
 				switch rand.Intn(4) {
 				case 0:
@@ -303,7 +310,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 						d = Cell{-1, 0}
 					}
 				}
-				if !maze[s.Y+d.Y][s.X+d.X] && isCurrentWall(currentWall, Cell{s.X + 2*d.X, s.Y + 2*d.Y}) {
+				if !maze[s.Y+d.Y][s.X+d.X] && !isCurrentWall(currentWall, Cell{s.X + 2*d.X, s.Y + 2*d.Y}) {
 					break
 				}
 			}
