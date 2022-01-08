@@ -298,7 +298,7 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 		for { // 起点から壁伸ばし処理
 			d := Cell{0, 0}
 			for { // 進む方向決め
-				if maze[s.Y-1][s.X] != 0 || isCurrentWall(currentWall, Cell{s.X, s.Y - 2}) &&
+				if maze[s.Y-1][s.X] != 0 && isCurrentWall(currentWall, Cell{s.X, s.Y - 2}) &&
 					maze[s.Y][s.X+1] != 0 && isCurrentWall(currentWall, Cell{s.X + 2, s.Y}) &&
 					maze[s.Y+1][s.X] != 0 && isCurrentWall(currentWall, Cell{s.X, s.Y + 2}) &&
 					maze[s.Y][s.X-1] != 0 && isCurrentWall(currentWall, Cell{s.X - 2, s.Y}) { // どこにも進めないなら
@@ -337,10 +337,10 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 				continue
 			}
 
+			currentWall = append(currentWall, Cell{s.X + d.X, s.Y + d.Y})
 			if maze[s.Y+2*d.Y][s.X+2*d.X] != 0 { //壁の拡張終了
 				break
 			} else {
-				currentWall = append(currentWall, Cell{s.X + d.X, s.Y + d.Y})
 				s = Cell{s.X + 2*d.X, s.Y + 2*d.Y}
 				currentWall = append(currentWall, s)
 			}
