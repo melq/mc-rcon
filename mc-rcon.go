@@ -339,15 +339,31 @@ func createMaze(height int, width int) ([][]int, error) {
 	return maze, nil
 }
 
-func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, /*material string, client *minecraft.Client*/) {
+func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, material string, client *minecraft.Client) {
 	sortPositions(&x1, &y1, &z1, &x2, &y2, &z2)
 
-	height := int(math.Abs(float64(z2 - z1)))
+	length := int(math.Abs(float64(z2 - z1)))
 	width := int(math.Abs(float64(x2 - x1)))
+	height := int(math.Abs(float64(y2 - y1)))
 
-	maze, err := createMaze(height, width)
+	maze, err := createMaze(length, width)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	for i, v := range maze {
+		for j, vv := range v {
+			if vv != 0 {
+				for k := 0; i < height; i++ {
+					time.Sleep(3)
+					_, err = client.SendCommand(fmt.Sprintf(
+						"setblock %d %d %d %s", x1+j, y1+k, z1+i, material))
+					if err != nil {
+						log.Fatal(err)
+					}
+				}
+			}
+		}
 	}
 
 	dumpMaze(maze)
