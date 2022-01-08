@@ -197,13 +197,101 @@ func GetInventory(name string, client *minecraft.Client) Inventory {
 	return inventory
 }
 
-func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) {
-	width := int(math.Abs(float64(x2 - x1)))
+type Cell struct {
+	X int
+	Y int
+}
+
+func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraft.Client*/) error {
+	if x1 > x2 {
+		tmp := x1
+		x1 = x2
+		x2 = tmp
+	}
+	if y1 > y2 {
+		tmp := y1
+		y1 = y2
+		y2 = tmp
+	}
+	if z1 > z2 {
+		tmp := z1
+		z1 = z2
+		z2 = tmp
+	}
+
 	height := int(math.Abs(float64(z2 - z1)))
+	width := int(math.Abs(float64(x2 - x1)))
+
+	if height%2 == 0 {
+		height--
+	}
+	if width%2 == 0 {
+		width--
+	}
+	if height < 5 || width < 5 {
+		return fmt.Errorf("size is too small")
+	}
+
 	maze := make([][]bool, height)
 	for i := 0; i < height; i++ {
 		maze[i] = make([]bool, width)
 	}
+
+	var startCells []Cell
+	for i, v := range maze {
+		for j := range v {
+			if i == 0 || j == 0 || i == height-1 || j == width-1 {
+				maze[i][j] = true
+			} else {
+				if i%2 == 0 && j%2 == 0 {
+					startCells = append(startCells, Cell{j, i})
+				}
+			}
+		}
+	}
+
+	//for len(startCells) != 0 {
+	//	s := startCells[rand.Intn(len(startCells))]
+	//	if maze[s.Y][s.X] {
+	//		continue
+	//	}
+	//	for {
+	//		maze[s.Y][s.X] = true
+	//
+	//		d := 0
+	//
+	//		for {
+	//			d = rand.Intn(4)
+	//			switch d {
+	//			case 0:
+	//				{
+	//					if !maze[s.Y-1][s.X] {
+	//						break
+	//					}
+	//				}
+	//			case 1:
+	//				{
+	//					if !maze[s.Y][s.X+1] {
+	//						break
+	//					}
+	//				}
+	//			case 2:
+	//				{
+	//					if !maze[s.Y+1][s.X] {
+	//						break
+	//					}
+	//				}
+	//			case 3:
+	//				{
+	//					if !maze[s.Y][s.X-1] {
+	//						break
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
 	for _, v := range maze {
 		for _, vv := range v {
 			tmp := "□"
@@ -214,4 +302,5 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 		}
 		fmt.Println()
 	}
+	return nil
 }
