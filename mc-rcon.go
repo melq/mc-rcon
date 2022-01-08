@@ -252,15 +252,22 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 	}
 
 	for len(startCells) != 0 {
-		s := startCells[rand.Intn(len(startCells))]
+		r := rand.Intn(len(startCells))
+		s := startCells[r]
 		if maze[s.Y][s.X] {
+			var tmp []Cell
+			for i := 0; i < len(startCells); i++ {
+				if i != r {
+					tmp = append(tmp, startCells[i])
+				}
+			}
+			startCells = tmp
 			continue
 		}
 		for {
 			maze[s.Y][s.X] = true
 
 			d := 0
-
 			for {
 				d = rand.Intn(4)
 				switch d {
