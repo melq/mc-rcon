@@ -283,6 +283,8 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 		for { // 起点から壁伸ばし処理
 			maze[s.Y][s.X] = true
 			currentWall = append(currentWall, s)
+
+			d := Cell{0, 0}
 			for { // 進む方向決め
 				if maze[s.Y-1][s.X] || isCurrentWall(currentWall, Cell{s.X, s.Y - 2}) &&
 					maze[s.Y][s.X+1] || isCurrentWall(currentWall, Cell{s.X + 2, s.Y}) &&
@@ -291,7 +293,6 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 					break
 				}
 
-				d := Cell{0, 0}
 				switch rand.Intn(4) {
 				case 0:
 					{
@@ -314,7 +315,10 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*client *minecraf
 					break
 				}
 			}
-
+			emptyCell := Cell{0, 0}
+			if d != emptyCell && maze[s.Y+2*d.Y][s.X+2*d.X] {
+				break
+			}
 		}
 	}
 
