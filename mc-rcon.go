@@ -354,10 +354,15 @@ func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, material string, 
 	for i, v := range maze {
 		for j, vv := range v {
 			if vv != 0 {
-				for k := 0; i < height; i++ {
+				for k := 0; k < height; k++ {
 					time.Sleep(3)
-					_, err = client.SendCommand(fmt.Sprintf(
-						"setblock %d %d %d %s", x1+j, y1+k, z1+i, material))
+					if vv != 0 {
+						_, err = client.SendCommand(fmt.Sprintf(
+							"setblock %d %d %d %s", x1+j, y1+k, z1+i, material))
+					} else {
+						_, err = client.SendCommand(fmt.Sprintf(
+							"setblock %d %d %d %s", x1+j, y1+k, z1+i, "minecraft:air"))
+					}
 					if err != nil {
 						log.Fatal(err)
 					}

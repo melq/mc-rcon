@@ -71,5 +71,7 @@ func TestGetInventory(t *testing.T) {
 }
 
 func TestBuildMaze(t *testing.T) {
-	mc_rcon.BuildMaze(0, 0, 0, 19, 20, 15)
+	client := mc_rcon.GetClient("localhost:25575", "password")
+	defer client.Close()
+	mc_rcon.BuildMaze(23, -60, -39, 54, -57, -8, "minecraft:sea_lantern", client)
 }
