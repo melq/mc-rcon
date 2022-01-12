@@ -202,37 +202,37 @@ func GetInventory(name string, client *minecraft.Client) Inventory {
 	return inventory
 }
 
-func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int /*material string, client *minecraft.Client*/) {
+func BuildMaze(x1 int, y1 int, z1 int, x2 int, y2 int, z2 int, material string, client *minecraft.Client) {
 	sortPositions(&x1, &y1, &z1, &x2, &y2, &z2)
 
 	length := int(math.Abs(float64(z2 - z1)))
 	width := int(math.Abs(float64(x2 - x1)))
-	//height := int(math.Abs(float64(y2 - y1)))
+	height := int(math.Abs(float64(y2 - y1)))
 
 	m, err := maze.CreateMaze(length, width)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//for i, v := range m {
-	//	for j, vv := range v {
-	//		if vv != 0 {
-	//			for k := 0; k < height; k++ {
-	//				time.Sleep(3)
-	//				if vv != 0 {
-	//					_, err = client.SendCommand(fmt.Sprintf(
-	//						"setblock %d %d %d %s", x1+j, y1+k, z1+i, material))
-	//				} else {
-	//					_, err = client.SendCommand(fmt.Sprintf(
-	//						"setblock %d %d %d %s", x1+j, y1+k, z1+i, "minecraft:air"))
-	//				}
-	//				if err != nil {
-	//					log.Fatal(err)
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+	for i, v := range m {
+		for j, vv := range v {
+			if vv != 0 {
+				for k := 0; k < height; k++ {
+					time.Sleep(3)
+					if vv != 0 {
+						_, err = client.SendCommand(fmt.Sprintf(
+							"setblock %d %d %d %s", x1+j, y1+k, z1+i, material))
+					} else {
+						_, err = client.SendCommand(fmt.Sprintf(
+							"setblock %d %d %d %s", x1+j, y1+k, z1+i, "minecraft:air"))
+					}
+					if err != nil {
+						log.Fatal(err)
+					}
+				}
+			}
+		}
+	}
 
 	maze.DumpMaze(m)
 }
